@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <form id="form" action="" method="post">
+      <input type="text" name="name" id="name" />
+
+      <button type="submit">Enviar</button>
+    </form>
+  </body>
+</html>
+
+<script>
+  const form = document.getElementById("form");
+  console.log("form", form);
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const data = new FormData(form);
+    let newData = {};
+    for (const [name, value] of data) {
+      newData = { name: value };
+    }
+
+    const response = await Request("http://127.0.0.1:8000", newData);
+    console.log("response", response);
+  });
+
+  async function Request(url = "", data = {}) {
+    const response = await fetch(url, {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  }
+</script>
